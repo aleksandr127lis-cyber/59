@@ -89,8 +89,9 @@ describe('superOrderBlocks — displacement gate (Проблема B)', () => {
     const fromIdx20 = blocks.filter((b) => b.index === 20);
     expect(fromIdx20).toHaveLength(0);
 
-    // With requireDisplacement: false, the block appears but hasDisplacement is false
-    const rawBlocks = superOrderBlocks(candles, 100, { structure: UP_STRUCTURE, requireDisplacement: false });
+    // With requireDisplacement: false and explicit atrValue, the block appears
+    // but hasDisplacement is false (range 1.0 < 1.2 * 1.2 = 1.44).
+    const rawBlocks = superOrderBlocks(candles, 100, { structure: UP_STRUCTURE, requireDisplacement: false, atrValue: 1.2 });
     const rawFromIdx20 = rawBlocks.filter((b) => b.index === 20);
     expect(rawFromIdx20.length).toBeGreaterThan(0);
     expect(rawFromIdx20[0].hasDisplacement).toBe(false);
