@@ -43,7 +43,7 @@ export function applySignalFilters(
   // IndicatorAggregator) instead of a hardcoded-period recompute.
   const atrValue = snapshot.indicators.atr ?? 0;
   const proximity = atrValue * 3;
-  const obZones = (toggles.obConfirmation && hasFeature('order-block-strength')) ? orderBlockStrength(candles, 50, snapshot.structure) : [];
+  const obZones = (toggles.obConfirmation && hasFeature('order-block-strength')) ? orderBlockStrength(candles, 50, snapshot.structure, false) : [];
   const nearbyOBs = (toggles.obConfirmation && hasFeature('order-block-strength')) ? obZones.filter((z) =>
     z.status !== 'broken' &&
     z.low - proximity <= lastClose && lastClose <= z.high + proximity &&

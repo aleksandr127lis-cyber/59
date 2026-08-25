@@ -140,7 +140,7 @@ function findTargetZone(
 ): number | undefined {
   const candidates: number[] = [];
 
-  const obZones = orderBlockStrength(candles);
+  const obZones = orderBlockStrength(candles, 50, undefined, false);
   for (const z of obZones) {
     if (z.status === 'broken') continue;
     const level = direction === 'buy' ? z.high : z.low;

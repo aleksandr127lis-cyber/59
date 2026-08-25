@@ -74,7 +74,7 @@ export function computeDirectionScore(
   const proximity = atrValue ? atrValue * 2 : 0;
 
   if (hasFeature('order-block-strength')) {
-    const obZones = orderBlockStrength(candles, 50, snapshot.structure);
+    const obZones = orderBlockStrength(candles, 50, snapshot.structure, false);
     const activeBullOB = obZones.filter((z) => z.direction === 'bullish' && z.status !== 'broken');
     const activeBearOB = obZones.filter((z) => z.direction === 'bearish' && z.status !== 'broken');
 
@@ -254,7 +254,7 @@ export function isPatternInRange(candles: Candle[], snapshot: Snapshot): boolean
   if (!atrValue || atrValue <= 0) return false;
 
   const nearLevel = levels.some((l) => Math.abs(last.close - l.price) <= atrValue);
-  const obZones = orderBlockStrength(candles, 50, snapshot.structure);
+  const obZones = orderBlockStrength(candles, 50, snapshot.structure, false);
   const nearOB = obZones.some((z) =>
     z.status !== 'broken' && last.close >= z.low - atrValue * 0.5 && last.close <= z.high + atrValue * 0.5,
   );

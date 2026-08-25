@@ -53,9 +53,10 @@ export interface OrderBlockZone {
   //    is false (not gating) when `structure` isn't supplied at all.
   hasStructureConfluence: boolean;
   // All three conditions above at once — the "обязательны все условия" gate
-  // from the spec, precomputed for convenience. Only gates the return value
-  // of orderBlockStrength() when `onlyValidated: true` is passed explicitly
-  // (default is `false`, preserving prior behaviour for existing callers).
+  // from the spec, precomputed for convenience. Gates the return value of
+  // orderBlockStrength() when `onlyValidated: true` (the default). Pass
+  // `onlyValidated: false` to get all non-filled zones regardless of
+  // validation status (e.g. for direction scoring or target-finding).
   validated: boolean;
 }
 
@@ -120,7 +121,7 @@ export function orderBlockStrength(
   candles: Candle[],
   lookback: number = 50,
   structure?: MarketStructure,
-  onlyValidated: boolean = false,
+  onlyValidated: boolean = true,
 ): OrderBlockZone[] {
   if (candles.length < 5) return [];
 

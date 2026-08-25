@@ -354,7 +354,7 @@ describe('classifyVsa', () => {
 describe('orderBlockStrength', () => {
   it('filters filled FVG zones', () => {
     const candles = makeCandles(50, 100);
-    const zones = orderBlockStrength(candles);
+    const zones = orderBlockStrength(candles, 50, undefined, false);
     for (const z of zones) {
       expect(z.filled).toBe(false);
     }
