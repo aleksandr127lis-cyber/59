@@ -52,6 +52,21 @@ describe('useAnalyticsStore', () => {
       }
       expect(useAnalyticsStore.getState().signals).toHaveLength(20);
     });
+
+    it('does not add a duplicate signal with the same id', () => {
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 'sig-1', score: 3 }));
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 'sig-1', score: 5 }));
+      const signals = useAnalyticsStore.getState().signals;
+      expect(signals).toHaveLength(1);
+      expect(signals[0].score).toBe(3);
+    });
+
+    it('does not add a duplicate even when other signals are in between', () => {
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 'sig-1' }));
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 'sig-2' }));
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 'sig-1' }));
+      expect(useAnalyticsStore.getState().signals).toHaveLength(2);
+    });
   });
 
   describe('upsertSignal', () => {

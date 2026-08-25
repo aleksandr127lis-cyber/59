@@ -36,6 +36,7 @@ export const useAnalyticsStore = create<AnalyticsState>((set, get) => ({
 
   addSignal: (signal) =>
     set((s) => {
+      if (s.signals.some((sig) => sig.id === signal.id)) return {};
       const signals = [signal, ...s.signals].slice(0, MAX_SIGNALS);
       return { signals };
     }),
