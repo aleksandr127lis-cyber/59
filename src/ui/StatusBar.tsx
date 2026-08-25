@@ -45,9 +45,10 @@ export function StatusBar() {
 
   const ChangeIcon = flash === 'up' ? TrendingUp : flash === 'down' ? TrendingDown : Minus;
 
-  const completedSignals = signals.filter((s) => s.outcome === 'win' || s.outcome === 'loss');
+  const completedSignals = signals.filter((s) => s.outcome === 'win' || s.outcome === 'loss' || s.outcome === 'timeout');
   const wins = completedSignals.filter((s) => s.outcome === 'win').length;
   const losses = completedSignals.filter((s) => s.outcome === 'loss').length;
+  const draws = completedSignals.filter((s) => s.outcome === 'timeout').length;
   const winRatePct = winRate !== null ? Math.round(winRate * 100) : null;
   const winRateTone = winRatePct !== null && winRatePct >= 60 ? 'text-success-400' : winRatePct !== null && winRatePct >= 45 ? 'text-secondary-400' : 'text-error-400';
 
@@ -79,6 +80,12 @@ export function StatusBar() {
           <span className="font-mono text-success-400">{wins}</span>
           <span className="text-base-600">/</span>
           <span className="font-mono text-error-400">{losses}</span>
+          {draws > 0 && (
+            <>
+              <span className="text-base-600">/</span>
+              <span className="font-mono text-base-400">{draws}</span>
+            </>
+          )}
         </span>
       )}
       <span className="flex shrink-0 items-center gap-1">

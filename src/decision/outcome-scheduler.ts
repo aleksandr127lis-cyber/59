@@ -85,4 +85,8 @@ export class OutcomeScheduler {
   getPendingCount(): number {
     return this.pending.length;
   }
+
+  getPendingList(): PendingSignal[] {
+    return this.pending;
+  }
 }

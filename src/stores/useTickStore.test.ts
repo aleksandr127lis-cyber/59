@@ -60,6 +60,7 @@ vi.mock('@/decision/outcome-scheduler', () => ({
     onCandleClosed: vi.fn(),
     clear: vi.fn(),
     getPendingCount: vi.fn().mockReturnValue(0),
+    getPendingList: vi.fn().mockReturnValue([]),
   })),
 }));
 

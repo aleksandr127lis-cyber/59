@@ -110,12 +110,14 @@ export const useAnalyticsStore = create<AnalyticsState>((set, get) => ({
 
   recomputeStats: () => {
     const { signals } = get();
-    const completed = signals.filter((s) => s.outcome === 'win' || s.outcome === 'loss');
+    const completed = signals.filter((s) => s.outcome === 'win' || s.outcome === 'loss' || s.outcome === 'timeout');
     if (completed.length === 0) {
-      set({ winRate: null });
+      set({ winRate: null, calibrationSampleCount: 0 });
       return;
     }
     const wins = completed.filter((s) => s.outcome === 'win').length;
-    set({ winRate: wins / completed.length, calibrationSampleCount: completed.length });
+    const decided = completed.filter((s) => s.outcome === 'win' || s.outcome === 'loss');
+    const winRate = decided.length > 0 ? wins / decided.length : null;
+    set({ winRate, calibrationSampleCount: completed.length });
   },
 }));

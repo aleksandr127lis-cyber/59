@@ -181,6 +181,23 @@ describe('useAnalyticsStore', () => {
       expect(useAnalyticsStore.getState().winRate).toBeCloseTo(2 / 3, 5);
     });
 
+    it('counts timeout as completed but excludes from winRate', () => {
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 's1', outcome: 'win' }));
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 's2', outcome: 'loss' }));
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 's3', outcome: 'timeout' }));
+      useAnalyticsStore.getState().recomputeStats();
+      // winRate = 1 win / (1 win + 1 loss) = 0.5, sampleCount = 3
+      expect(useAnalyticsStore.getState().winRate).toBeCloseTo(0.5, 5);
+      expect(useAnalyticsStore.getState().calibrationSampleCount).toBe(3);
+    });
+
+    it('sets winRate to null when only timeouts', () => {
+      useAnalyticsStore.getState().addSignal(makeSignal({ id: 's1', outcome: 'timeout' }));
+      useAnalyticsStore.getState().recomputeStats();
+      expect(useAnalyticsStore.getState().winRate).toBeNull();
+      expect(useAnalyticsStore.getState().calibrationSampleCount).toBe(1);
+    });
+
     it('sets winRate to null when no completed signals', () => {
       useAnalyticsStore.getState().addSignal(makeSignal({ id: 's1', outcome: 'pending' }));
       useAnalyticsStore.getState().recomputeStats();

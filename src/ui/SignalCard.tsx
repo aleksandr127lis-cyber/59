@@ -157,7 +157,7 @@ export function OutcomeBadge({ outcome }: { outcome: Signal['outcome'] }) {
   };
   return (
     <span className={clsx('rounded px-1.5 py-0.5 text-2xs font-bold uppercase', styles[outcome])}>
-      {outcome === 'win' ? 'Прибыль' : outcome === 'loss' ? 'Убыток' : 'Тайм-аут'}
+      {outcome === 'win' ? 'Прибыль' : outcome === 'loss' ? 'Убыток' : 'Ничья'}
     </span>
   );
 }

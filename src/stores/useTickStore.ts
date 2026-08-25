@@ -25,6 +25,7 @@ import {
   saveSignal,
   loadCalibrationStateFromDb,
   saveCalibrationState,
+  updateSignalOutcome,
 } from '@/lib/signal-persistence';
 import { useDemoAccountStore } from '@/stores/useDemoAccountStore';
 import { getActiveFeatures, notifySignal } from './tick-store/shared';
@@ -202,6 +203,17 @@ function outcomeDeps() {
   };
 }
 
+function resolvePendingAsTimeout(): void {
+  if (!outcomeScheduler) return;
+  const analytics = useAnalyticsStore.getState();
+  for (const p of outcomeScheduler.getPendingList()) {
+    const sig = p.signal;
+    analytics.updateSignalOutcome(sig.id, 'timeout');
+    void updateSignalOutcome(sig.id, 'timeout');
+  }
+  analytics.recomputeStats();
+}
+
 export const useTickStore = create<TickState>((set, get) => ({
   candles: [],
   currentPrice: null,
@@ -248,6 +260,7 @@ export const useTickStore = create<TickState>((set, get) => ({
       lastCandleCloseAtMs: 0,
       candleLifecycle: 'live',
     });
+    resolvePendingAsTimeout();
     useAnalyticsStore.getState().clearAll();
     resetPreCloseTriggeredCandleTime();
 
